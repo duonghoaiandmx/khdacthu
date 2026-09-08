@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shinhan Finance - Trợ Lý Sales Mobile</title>
+    <style>
+        :root {
+            --primary: #00468c;
+            --primary-dark: #003366;
+            --secondary: #e6b800;
+            --bg-body: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding-bottom: 24px;
+            font-size: 14px;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary);
+            color: white;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,70,140,0.15);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .badge {
+            background: var(--secondary);
+            color: var(--primary-dark);
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .app-container {
+            padding: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+        }
+
+        .form-select, .form-input {
+            width: 100%;
+            height: 44px;
+            padding: 0 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .form-select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 36px;
+        }
+
+        .form-select:focus, .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 70, 140, 0.1);
+        }
+
+        .result-panel {
+            background: linear-gradient(135deg, #00468c, #005bc1);
+            color: white;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,70,140,0.25);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .result-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .result-value {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        .formula-card {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin: 10px 0;
+            font-size: 0.78rem;
+            line-height: 1.5;
+            color: #f8fafc;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .formula-title {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .formula-math {
+            font-family: monospace, sans-serif;
+            font-size: 0.82rem;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 4px;
+            word-break: break-all;
+        }
+
+        .cap-alert {
+            display: none;
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: var(--danger);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .btn-action {
+            width: 100%;
+            height: 46px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(0,70,140,0.2);
+            text-decoration: none;
+        }
+
+        .btn-action:active {
+            background-color: var(--primary-dark);
+            transform: scale(0.99);
+        }
+
+        .alert-box {
+            background-color: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            color: #92400e;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        .preview-img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+
+        .fallback-btn-container {
+            display: none;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .table-responsive {
+            max-height: 320px;
+            overflow-y: auto;
+            margin-top: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            text-align: right;
+        }
+
+        .schedule-table th, .schedule-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .schedule-table th {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .schedule-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .schedule-table td:first-child, .schedule-table th:first-child {
+            text-align: center;
+        }
+
+        .schedule-summary {
+            background: #eef2ff;
+            border: 1px solid #c7d2fe;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-top: 12px;
+            font-size: 0.82rem;
+        }
+
+        .schedule-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .schedule-summary-row:last-child {
+            margin-bottom: 0;
+            font-weight: 700;
+            color: var(--primary);
+            border-top: 1px solid #c7d2fe;
+            padding-top: 6px;
+        }
+
+        .dbr-box {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .dbr-title {
+            font-weight: 700;
+            color: #166534;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .dbr-value-highlight {
+            color: #059669;
+            font-weight: 800;
+        }
+
+        .dbr-status-pass {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .dbr-status-fail {
+            color: var(--danger);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">SHINHAN FINANCE</div>
+        <div class="badge" id="code-promo-badge">MELP_SI</div>
+    </header>
+
+    <div class="app-container">
+
+        <!-- Card 1: Tính Thu Nhập SI -->
+        <div class="card">
+            <div class="card-header">1. Tính Thu Nhập Thay Thế (SI)</div>
+            
+            <div class="form-group">
+                <label class="form-label">Lĩnh vực / ngành nghề:</label>
+                <select id="group" class="form-select" onchange="onGroupChange()">
+                    <option value="yte">🏥 Y Tế (MELP)</option>
+                    <option value="giaoduc">🎓 Giáo Dục (TLP)</option>
+                    <option value="nhanuoc">🏛️ Cơ Quan Nhà Nước (GELP)</option>
+                    <option value="quandoi">🛡️ Công An / Quân Đội (GELP_MILITARY)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="hang-container">
+                <label class="form-label">Hạng Bệnh viện / Phòng khám:</label>
+                <select id="hang" class="form-select" onchange="calculateAll()">
+                    <option value="A">Hạng A (Tuyến TW/Tỉnh / BV Hạng 1, 2)</option>
+                    <option value="B" selected>Hạng B (Tuyến Huyện / BV Hạng 3 / PK Tư)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Chức danh / Cấp bậc / Thâm niên:</label>
+                <select id="position" class="form-select" onchange="calculateAll()">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Hệ số lương (Tự nhập):</label>
+                <input type="number" id="si-he-so-luong" class="form-input" value="3.0" step="0.01" oninput="calculateAll()" placeholder="Nhập hệ số lương...">
+            </div>
+        </div>
+
+        <!-- Kết Quả Tính SI -->
+        <div class="result-panel">
+            <div class="result-item">
+                <span class="result-label">Thu nhập quy đổi:</span>
+                <span class="result-value" id="res-income">0 VNĐ</span>
+            </div>
+
+            <div class="formula-card">
+                <span class="formula-title">📐 Công thức tính chi tiết:</span>
+                <div>Cơ sở: <b>Lương chuẩn × Hệ số áp dụng × Hệ số lương</b></div>
+                <div class="formula-math" id="formula-detail">
+                    2.530.000 × 1.0 × 3.00 = 7.590.000 VNĐ
+                </div>
+                <div id="cap-alert" class="cap-alert">
+                    ⚠️ Đã chạm trần tối đa (Max Cap theo quy định)!
+                </div>
+            </div>
+
+            <div class="result-item">
+                <span class="result-label">Hệ số tối đa:</span>
+                <span class="result-value" id="res-heso" style="color:#ffffff;">1.0</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Trần SI tối đa (Max Cap):</span>
+                <span class="result-value" id="res-max-cap" style="color:#fde047;">0 VNĐ</span>
+            </div>
+        </div>
+
+        <div id="note-container"></div>
+
+        <!-- Card 2: Tính Lãi Suất, DBR & Khoản Vay Tối Đa -->
+        <div class="card" style="margin-top: 12px;">
+            <div class="card-header">2. Kiểm Tra DBR & Tính Trả Góp Cố Định Hàng Tháng</div>
+
+            <div class="form-group">
+                <label class="form-label">Loại khoản vay:</label>
+                <select id="loan-type" class="form-select" onchange="autoUpdateInterestRate()">
+                    <option value="consumer">Khoản vay tiêu dùng</option>
+                    <option value="life">Khoản vay phục vụ đời sống (LNL)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Khu vực địa lý:</label>
+                <select id="loan-region" class="form-select" onchange="autoUpdateInterestRate()">
+                    <option value="major">HN / ĐN / HCM</option>
+                    <option value="other">Các tỉnh / thành khác</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Nhóm khách hàng (Tự động cập nhật DBR):</label>
+                <select id="loan-segment" class="form-select" onchange="autoUpdateInterestRate()">
+                    <option value="PS">Khách hàng PS (DBR 50%)</option>
+                    <option value="Non">Khách hàng Non-PS (DBR 40%)</option>
+                </select>
+            </div>
+
+            <!-- Bổ sung nhập nghĩa vụ nợ hiện tại -->
+            <div class="form-group">
+                <label class="form-label">Số tiền nợ đang phải trả mỗi tháng (VNĐ):</label>
+                <input type="text" id="existing-debt-formatted" class="form-input" value="0" placeholder="Nhập số tiền nợ hiện tại..." oninput="formatCurrencyInput(this); updateDbrCalculations();" style="border-color: #f59e0b;">
+            </div>
+
+            <!-- Khung Đánh Giá DBR & Hạn Mức Tối Đa -->
+            <div class="dbr-box">
+                <div class="dbr-title">
+                    <span>📊 Khả Năng Vay & Nghĩa Vụ DBR</span>
+                    <span id="dbr-percent-badge" class="dbr-value-highlight">DBR: 50%</span>
+                </div>
+                <div style="font-size: 0.78rem; line-height: 1.6; color: #334155;">
+                    • Tổng hạn mức trả nợ tối đa/tháng: <strong id="dbr-gross-monthly">0 VNĐ</strong><br>
+                    • Tiền trả nợ đang có hàng tháng: <strong id="dbr-existing-monthly" style="color: var(--danger);">0 VNĐ</strong><br>
+                    • Tiền trả góp tối đa/tháng <u>cho khoản mới</u>: <strong id="dbr-max-monthly" style="color: #047857;">0 VNĐ</strong><br>
+                    • Hạn mức vay tối đa ước tính (<span id="dbr-tenure-label">36</span>T): <strong id="dbr-max-loan" style="color: #00468c;">0 VNĐ</strong>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 12px;">
+                <label class="form-label">Lãi suất tự động tra cứu (%/năm):</label>
+                <input type="number" id="interest-rate" class="form-input" value="0" step="0.1" oninput="updateDbrCalculations()" style="background-color: #f1f5f9; font-weight: 700; color: var(--primary);">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Số tiền cần vay (VNĐ):</label>
+                <input type="text" id="loan-amount-formatted" class="form-input" value="50.000.000" oninput="formatCurrencyInput(this)">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Thời hạn vay:</label>
+                <select id="loan-tenure" class="form-select" onchange="updateDbrCalculations()">
+                    <option value="12">12 Tháng</option>
+                    <option value="24">24 Tháng</option>
+                    <option value="36" selected>36 Tháng</option>
+                    <option value="48">48 Tháng</option>
+                    <option value="60">60 Tháng</option>
+                </select>
+            </div>
+
+            <button class="btn-action" onclick="calculateLoan()">
+                <span>TÍNH SỐ TIỀN ĐÓNG MỖI THÁNG & LỊCH TRẢ</span>
+            </button>
+
+            <!-- Kết Quả Lịch Trả Góp Chi Tiết -->
+            <div id="loan-result" style="display: none; margin-top: 12px;">
+                <div class="schedule-summary">
+                    <div class="schedule-summary-row">
+                        <span>Số tiền vay gốc:</span>
+                        <strong id="summary-principal">0 VNĐ</strong>
+                    </div>
+                    <div class="schedule-summary-row">
+                        <span>Số tiền đóng cố định mỗi tháng:</span>
+                        <strong id="summary-equal-monthly-payment" style="color: #059669; font-size: 1rem;">0 VNĐ</strong>
+                    </div>
+                    <div class="schedule-summary-row">
+                        <span>Đánh giá DBR khoản vay:</span>
+                        <span id="summary-dbr-status" class="dbr-status-pass">✅ ĐẠT (Thuộc DBR)</span>
+                    </div>
+                    <div class="schedule-summary-row">
+                        <span>Tổng tiền lãi phải trả:</span>
+                        <strong id="summary-total-interest" style="color: var(--danger);">0 VNĐ</strong>
+                    </div>
+                    <div class="schedule-summary-row">
+                        <span>Tổng tiền gốc + lãi phải trả:</span>
+                        <strong id="summary-total-pay">0 VNĐ</strong>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Tháng</th>
+                                <th>Gốc trả</th>
+                                <th>Lãi trả</th>
+                                <th>Tổng đóng</th>
+                                <th>Dư nợ còn lại</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Bảng Tóm Tắt Sản Phẩm & Lãi Suất -->
+        <div class="card" style="margin-top: 12px;">
+            <div class="card-header">📌 Bảng Tra Cứu Tóm Tắt & Lãi Suất</div>
+            
+            <p style="font-size: 0.78rem; font-weight: 600; color: var(--text-sub); margin-bottom: 4px;">1. Bảng sản phẩm KH Đặc thù:</p>
+            <img id="product-summary-img" 
+                 src="https://lh3.googleusercontent.com/d/1LBH-PJNQOHoKRKmklqdNg2MQhDZMaIj6" 
+                 alt="Tóm tắt sản phẩm KH Đặc thù" 
+                 class="preview-img"
+                 onerror="handleImageError(this, 'fallback-container-1')">
+            <div id="fallback-container-1" class="fallback-btn-container">
+                <a href="https://drive.google.com/file/d/1LBH-PJNQOHoKRKmklqdNg2MQhDZMaIj6/view?usp=sharing" target="_blank" class="btn-action">
+                    🔗 MỞ BẢNG TÓM TẮT SẢN PHẨM (DRIVE)
+                </a>
+            </div>
+
+            <p style="font-size: 0.78rem; font-weight: 600; color: var(--text-sub); margin-top: 12px; margin-bottom: 4px;">2. Bảng quy định Lãi suất (từ 01/08/2026):</p>
+            <img id="interest-rate-img" 
+                 src="https://lh3.googleusercontent.com/d/1w6itbeRUKC9_Lul8-pUDq0gTGou6JnYu" 
+                 alt="Bảng Lãi Suất Tham Khảo" 
+                 class="preview-img"
+                 onerror="handleImageError(this, 'fallback-container-2')">
+            <div id="fallback-container-2" class="fallback-btn-container">
+                <a href="https://drive.google.com/file/d/1w6itbeRUKC9_Lul8-pUDq0gTGou6JnYu/view?usp=drive_link" target="_blank" class="btn-action">
+                    🔗 MỞ BẢNG LÃI SUẤT (DRIVE)
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const BASE_SALARY = 2530000;
+        let currentCalculatedIncome = 0;
+
+        const dataSI = {
+            yte: {
+                promoCode: "MELP_SI",
+                hasHang: true,
+                note: "Cần bổ sung giấy tờ chứng minh phòng khám đang hoạt động và giấy đăng ký/giấy phép liên quan.",
+                positions: [
+                    { name: "Nhân viên, < 5 năm", h_A: 2, cap_A: 25000000, h_B: 2, cap_B: 20000000 },
+                    { name: "Nhân viên, ≥ 5 năm", h_A: 3, cap_A: 30000000, h_B: 3, cap_B: 25000000 },
+                    { name: "Bác sĩ", h_A: 3, cap_A: 40000000, h_B: 3, cap_B: 35000000 },
+                    { name: "Trưởng/Phó khoa hoặc tương đương", h_A: 4, cap_A: 55000000, h_B: 4, cap_B: 45000000 },
+                    { name: "Ban Giám đốc", h_A: 5, cap_A: 70000000, h_B: 5, cap_B: 55000000 },
+                    { name: "Các chức danh trên có phòng khám tư nhân", h_A: 5, cap_A: 70000000, h_B: 5, cap_B: 55000000 }
+                ]
+            },
+            giaoduc: {
+                promoCode: "TLP_SI",
+                hasHang: false,
+                note: "Áp dụng cho giáo viên biên chế Nhà nước & hợp đồng, dạy các cấp từ Tiểu học đến Đại học.",
+                positions: [
+                    { name: "Giáo viên, < 5 năm", heso: 2, cap: 25000000 },
+                    { name: "Giáo viên, ≥ 5 năm", heso: 3, cap: 30000000 },
+                    { name: "Trưởng/Phó bộ môn, Khoa/Phòng", heso: 3, cap: 40000000 },
+                    { name: "Ban Giám hiệu", heso: 4, cap: 50000000 },
+                    { name: "Giáo viên công tác tại trường Đại học", heso: 4, cap: 50000000 }
+                ]
+            },
+            nhanuoc: {
+                promoCode: "GELP_SI",
+                hasHang: false,
+                note: "Áp dụng cho cơ quan hành chính Nhà nước Trung ương đến địa phương.",
+                positions: [
+                    { name: "Nhân viên, < 5 năm", heso: 2, cap: 25000000 },
+                    { name: "Nhân viên, ≥ 5 năm", heso: 2, cap: 30000000 },
+                    { name: "Trưởng/Phó phòng", heso: 3, cap: 40000000 },
+                    { name: "Trưởng/Phó Cục, Vụ, Viện, Ban; GD/PGĐ Trung tâm", heso: 4, cap: 55000000 },
+                    { name: "Bộ trưởng/Thứ trưởng; Tổng Cục trưởng và tương đương", heso: 5, cap: 65000000 }
+                ]
+            },
+            quandoi: {
+                promoCode: "GELP_MILITARY_SI",
+                hasHang: false,
+                note: "Nếu khách có chức vụ & quân hàm, xem xét áp dụng hệ số cao hơn dựa trên thẩm định và chứng từ chứng minh.",
+                positions: [
+                    { name: "Binh sĩ/Hạ sĩ quan/Thiếu úy/Trung úy, < 5 năm", heso: 1, cap: 15000000 },
+                    { name: "Binh sĩ/Hạ sĩ quan/Thiếu úy/Trung úy, ≥ 5 năm", heso: 2, cap: 25000000 },
+                    { name: "Thượng úy", heso: 2.5, cap: 30000000 },
+                    { name: "Đại úy", heso: 2.5, cap: 30000000 },
+                    { name: "Thiếu tá", heso: 3, cap: 35000000 },
+                    { name: "Trung tá", heso: 4, cap: 40000000 },
+                    { name: "Thượng tá", heso: 4, cap: 50000000 },
+                    { name: "Đại tá", heso: 4, cap: 55000000 },
+                    { name: "Thiếu tướng trở lên", heso: 4, cap: 60000000 }
+                ]
+            }
+        };
+
+        const interestRateMatrix = [
+            { min: 0, max: 8000000, consumer: { major: { PS: 42.0, Non: 46.0 }, other: { PS: 47.0, Non: 49.0 } }, life: { major: { PS: 42.5, Non: 46.5 }, other: { PS: 47.5, Non: 49.0 } } },
+            { min: 8000001, max: 10000000, consumer: { major: { PS: 40.5, Non: 44.5 }, other: { PS: 45.5, Non: 49.0 } }, life: { major: { PS: 41.0, Non: 45.0 }, other: { PS: 46.0, Non: 49.0 } } },
+            { min: 10000001, max: 13000000, consumer: { major: { PS: 38.5, Non: 42.5 }, other: { PS: 43.5, Non: 47.0 } }, life: { major: { PS: 39.0, Non: 43.0 }, other: { PS: 44.0, Non: 47.5 } } },
+            { min: 13000001, max: 17000000, consumer: { major: { PS: 36.5, Non: 40.5 }, other: { PS: 41.5, Non: 45.0 } }, life: { major: { PS: 37.0, Non: 41.0 }, other: { PS: 42.0, Non: 45.5 } } },
+            { min: 17000001, max: 22000000, consumer: { major: { PS: 34.0, Non: 38.5 }, other: { PS: 39.5, Non: 43.0 } }, life: { major: { PS: 34.5, Non: 39.0 }, other: { PS: 40.0, Non: 43.5 } } },
+            { min: 22000001, max: 27000000, consumer: { major: { PS: 30.0, Non: 34.0 }, other: { PS: 35.0, Non: 39.0 } }, life: { major: { PS: 30.5, Non: 34.5 }, other: { PS: 35.5, Non: 39.5 } } },
+            { min: 27000001, max: 33000000, consumer: { major: { PS: 26.5, Non: 30.5 }, other: { PS: 31.5, Non: 35.0 } }, life: { major: { PS: 27.0, Non: 31.0 }, other: { PS: 32.0, Non: 35.5 } } },
+            { min: 33000001, max: Infinity, consumer: { major: { PS: 19.0, Non: 25.5 }, other: { PS: 26.5, Non: 30.0 } }, life: { major: { PS: 19.5, Non: 26.0 }, other: { PS: 27.0, Non: 30.5 } } }
+        ];
+
+        function formatNumberWithDots(number) {
+            if (isNaN(number)) return "0";
+            return Math.round(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function formatVND(num) {
+            return formatNumberWithDots(num) + " VNĐ";
+        }
+
+        function formatCurrencyInput(input) {
+            let value = input.value.replace(/\D/g, "");
+            if (value === "") {
+                input.value = "0";
+                return;
+            }
+            input.value = formatNumberWithDots(parseInt(value, 10));
+        }
+
+        function getRawNumberFromInput(inputId) {
+            const rawVal = document.getElementById(inputId).value.replace(/\./g, "").replace(/\D/g, "");
+            return parseFloat(rawVal) || 0;
+        }
+
+        function onGroupChange() {
+            const groupKey = document.getElementById('group').value;
+            const groupData = dataSI[groupKey];
+            const posSelect = document.getElementById('position');
+            const hangContainer = document.getElementById('hang-container');
+            const noteContainer = document.getElementById('note-container');
+
+            document.getElementById('code-promo-badge').innerText = groupData.promoCode;
+            hangContainer.style.display = groupData.hasHang ? 'block' : 'none';
+
+            posSelect.innerHTML = '';
+            groupData.positions.forEach((p, index) => {
+                let opt = document.createElement('option');
+                opt.value = index;
+                opt.innerText = p.name;
+                posSelect.appendChild(opt);
+            });
+
+            noteContainer.innerHTML = groupData.note ? `<div class="alert-box">📌 ${groupData.note}</div>` : '';
+
+            calculateAll();
+        }
+
+        function calculateAll() {
+            const groupKey = document.getElementById('group').value;
+            const groupData = dataSI[groupKey];
+
+            const posIndex = document.getElementById('position').value;
+            const posData = groupData.positions[posIndex];
+            const heSoLuong = parseFloat(document.getElementById('si-he-so-luong').value) || 0;
+
+            let heSoApDung = 0;
+            let maxCap = 0;
+
+            if (groupData.hasHang) {
+                const hangVal = document.getElementById('hang').value;
+                heSoApDung = (hangVal === 'A') ? posData.h_A : posData.h_B;
+                maxCap = (hangVal === 'A') ? posData.cap_A : posData.cap_B;
+            } else {
+                heSoApDung = posData.heso;
+                maxCap = posData.cap;
+            }
+
+            const calculatedIncome = BASE_SALARY * heSoApDung * heSoLuong;
+            let finalIncome = calculatedIncome;
+            const capAlert = document.getElementById('cap-alert');
+
+            if (calculatedIncome > maxCap) {
+                finalIncome = maxCap;
+                capAlert.style.display = 'block';
+                capAlert.innerText = `⚠️ Tính toán (${formatVND(calculatedIncome)}) > Max Cap quy định ➔ Tự động gán = ${formatVND(maxCap)}`;
+            } else {
+                capAlert.style.display = 'none';
+            }
+
+            currentCalculatedIncome = finalIncome;
+
+            document.getElementById('res-income').innerText = formatVND(finalIncome);
+            document.getElementById('res-heso').innerText = heSoApDung;
+            document.getElementById('res-max-cap').innerText = formatVND(maxCap);
+            
+            document.getElementById('formula-detail').innerText = `2.530.000 × ${heSoApDung} × ${heSoLuong} = ${formatVND(calculatedIncome)}`;
+
+            autoUpdateInterestRate();
+        }
+
+        function autoUpdateInterestRate() {
+            const loanType = document.getElementById('loan-type').value;
+            const region = document.getElementById('loan-region').value;
+            const segment = document.getElementById('loan-segment').value;
+
+            const row = interestRateMatrix.find(r => currentCalculatedIncome >= r.min && currentCalculatedIncome <= r.max);
+            
+            if (row) {
+                const rate = row[loanType][region][segment];
+                document.getElementById('interest-rate').value = rate;
+            }
+
+            updateDbrCalculations();
+        }
+
+        /* Tính toán DBR & Hạn mức vay tối đa sau khi trừ nợ hiện tại */
+        function updateDbrCalculations() {
+            const segment = document.getElementById('loan-segment').value;
+            const dbrRate = (segment === 'PS') ? 0.50 : 0.40;
+            
+            document.getElementById('dbr-percent-badge').innerText = `DBR: ${dbrRate * 100}%`;
+
+            const grossMaxMonthlyPayment = currentCalculatedIncome * dbrRate;
+            const existingMonthlyDebt = getRawNumberFromInput('existing-debt-formatted');
+
+            let netMaxMonthlyPayment = grossMaxMonthlyPayment - existingMonthlyDebt;
+            if (netMaxMonthlyPayment < 0) netMaxMonthlyPayment = 0;
+
+            document.getElementById('dbr-gross-monthly').innerText = formatVND(grossMaxMonthlyPayment);
+            document.getElementById('dbr-existing-monthly').innerText = formatVND(existingMonthlyDebt);
+            document.getElementById('dbr-max-monthly').innerText = formatVND(netMaxMonthlyPayment);
+
+            const n = parseInt(document.getElementById('loan-tenure').value) || 36;
+            const rateYear = parseFloat(document.getElementById('interest-rate').value) || 0;
+            document.getElementById('dbr-tenure-label').innerText = n;
+
+            if (rateYear > 0 && netMaxMonthlyPayment > 0) {
+                const r = (rateYear / 100) / 12;
+                const maxLoanAmount = netMaxMonthlyPayment * (Math.pow(1 + r, n) - 1) / (r * Math.pow(1 + r, n));
+                document.getElementById('dbr-max-loan').innerText = formatVND(maxLoanAmount);
+            } else {
+                document.getElementById('dbr-max-loan').innerText = formatVND(netMaxMonthlyPayment * n);
+            }
+        }
+
+        /* Thuật toán PMT (Dư nợ giảm dần - Số tiền đóng bằng nhau hàng tháng) */
+        function calculateLoan() {
+            const P = getRawNumberFromInput('loan-amount-formatted');
+            const n = parseInt(document.getElementById('loan-tenure').value) || 12;
+            const rateYear = parseFloat(document.getElementById('interest-rate').value) || 0;
+
+            if (P <= 0) return;
+
+            const r = (rateYear / 100) / 12;
+
+            let PMT = 0;
+            if (r > 0) {
+                PMT = Math.round(P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1));
+            } else {
+                PMT = Math.round(P / n);
+            }
+
+            let remainingBalance = P;
+            let totalInterest = 0;
+
+            const tbody = document.getElementById('schedule-body');
+            tbody.innerHTML = '';
+
+            for (let month = 1; month <= n; month++) {
+                const interestMonthly = Math.round(remainingBalance * r);
+                let principalMonthly = PMT - interestMonthly;
+
+                if (month === n || remainingBalance < principalMonthly) {
+                    principalMonthly = remainingBalance;
+                }
+
+                const totalMonthly = principalMonthly + interestMonthly;
+                remainingBalance -= principalMonthly;
+                if (remainingBalance < 0) remainingBalance = 0;
+
+                totalInterest += interestMonthly;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${month}</td>
+                    <td>${formatNumberWithDots(principalMonthly)}</td>
+                    <td>${formatNumberWithDots(interestMonthly)}</td>
+                    <td><b>${formatNumberWithDots(totalMonthly)}</b></td>
+                    <td>${formatNumberWithDots(remainingBalance)}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+
+            document.getElementById('summary-principal').innerText = formatVND(P);
+            document.getElementById('summary-equal-monthly-payment').innerText = formatVND(PMT);
+            document.getElementById('summary-total-interest').innerText = formatVND(totalInterest);
+            document.getElementById('summary-total-pay').innerText = formatVND(P + totalInterest);
+
+            // Đánh giá DBR sau khi trừ nợ hiện tại
+            const segment = document.getElementById('loan-segment').value;
+            const dbrRate = (segment === 'PS') ? 0.50 : 0.40;
+            const grossMaxMonthly = currentCalculatedIncome * dbrRate;
+            const existingMonthlyDebt = getRawNumberFromInput('existing-debt-formatted');
+            const netMaxMonthly = grossMaxMonthly - existingMonthlyDebt;
+
+            const dbrStatusEl = document.getElementById('summary-dbr-status');
+            if (netMaxMonthly <= 0) {
+                dbrStatusEl.className = 'dbr-status-fail';
+                dbrStatusEl.innerText = `❌ VƯỢT DBR (Nợ hiện tại đã vượt trần DBR cho phép)`;
+            } else if (PMT <= netMaxMonthly) {
+                dbrStatusEl.className = 'dbr-status-pass';
+                dbrStatusEl.innerText = `✅ ĐẠT (Đóng ${formatVND(PMT)} ≤ Hạn mức khả dụng ${formatVND(netMaxMonthly)})`;
+            } else {
+                dbrStatusEl.className = 'dbr-status-fail';
+                dbrStatusEl.innerText = `❌ VƯỢT DBR (Đóng ${formatVND(PMT)} > Hạn mức khả dụng ${formatVND(netMaxMonthly)})`;
+            }
+
+            document.getElementById('loan-result').style.display = 'block';
+        }
+
+        function handleImageError(img, fallbackId) {
+            img.style.display = 'none';
+            const fallbackContainer = document.getElementById(fallbackId);
+            if (fallbackContainer) {
+                fallbackContainer.style.display = 'block';
+            }
+        }
+
+        window.onload = function() {
+            onGroupChange();
+        };
+    </script>
+</body>
+</html>
